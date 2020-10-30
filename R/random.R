@@ -7,6 +7,7 @@
 #--------------------------------------------------
 ###################################################
 
+
 library(dplyr)
 library(survey)
 library(foreign)    # For converting *.dta
@@ -21,7 +22,6 @@ write.csv(yourData, file = "data/hh_98.csv")
 # Load hh_98.csv into a data.frame
 
 hh_98.df <- read.csv("data/hh_98.csv")
-
 
 ###########
 # Subset
@@ -47,8 +47,11 @@ t.test(data=hh_98.df, lexptot ~ progvillm, var.equal = TRUE)
 
 # Regression Implementation
 
+hh_98.df
+
 des1 <- svydesign(id = ~X,  weights = ~weight, data = hh_98.df)
 
+des1
 
 prog_place_1.lm <- lm(lexptot ~ progvillm, data = hh_98.df)
 summary(prog_place_1.lm)
