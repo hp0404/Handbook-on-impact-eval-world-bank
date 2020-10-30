@@ -13,15 +13,7 @@ library(survey)
 library(foreign)    # For converting *.dta
 
 
-setwd("..")
-# Convert hh_98.dta to hh_98.csv with foreign package
-
-yourData <- read.dta("data/hh_98.dta")
-write.csv(yourData, file = "data/hh_98.csv")
-
-# Load hh_98.csv into a data.frame
-
-hh_98.df <- read.csv("data/hh_98.csv")
+hh_98.df <- read.csv("github/Handbook-on-impact-eval-world-bank/data/hh_98.csv")
 
 ###########
 # Subset

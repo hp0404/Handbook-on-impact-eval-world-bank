@@ -1,7 +1,8 @@
 import numpy as np 
 import pandas as pd
 from scipy import stats
-from statsmodels.api import OLS
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
 
 
 def run_ttest(table, values, by, two_sample=True):
@@ -44,3 +45,14 @@ df["progvillf"] = df.groupby("vill")["dfmfd"].transform("max")
 
 run_ttest(df, "lexptot", "progvillf")
 run_ttest(df, "lexptot", "progvillm")
+
+# OLS 
+
+res = smf.ols("lexptot ~ progvillm", data=df).fit()
+print(res)
+# res = smf.ols(
+#     "lexptot ~ progvillm + sexhead + agehead + educhead + lnland + vaccess + pcirr + rice + wheat + milk + oil + egg", 
+#     data=df
+# ).fit()
+
+# print(res.summary())
