@@ -1,6 +1,8 @@
 import numpy as np 
 import pandas as pd
 from scipy import stats
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
 
 
 def run_ttest(table, values, by, two_sample=True):
@@ -11,6 +13,14 @@ def run_ttest(table, values, by, two_sample=True):
     )
     test_type = "Two Sample t-test" if two_sample else "Welch Two Sample t-test"
     print(f"{test_type}; data: {values} by {by}; {t=}, {pvalue=}")
+    
+    
+def run_linregress(table, values, by):
+    slope, intercept, r_value, p_value, std_err = stats.linregress(
+        table.loc[table[by].eq(1), values],
+        table.loc[table[by].eq(0), values],
+    )
+    print(f"{slope=}, {intercept=}, {r_value=}, {p_value=}, {std_err=}")
 
 
 data = pd.read_csv("./../data/hh_98.csv").rename(columns={"Unnamed: 0": "X"})
@@ -35,3 +45,14 @@ df["progvillf"] = df.groupby("vill")["dfmfd"].transform("max")
 
 run_ttest(df, "lexptot", "progvillf")
 run_ttest(df, "lexptot", "progvillm")
+
+# OLS 
+
+res = smf.ols("lexptot ~ progvillm", data=df).fit()
+print(res)
+# res = smf.ols(
+#     "lexptot ~ progvillm + sexhead + agehead + educhead + lnland + vaccess + pcirr + rice + wheat + milk + oil + egg", 
+#     data=df
+# ).fit()
+
+# print(res.summary())
