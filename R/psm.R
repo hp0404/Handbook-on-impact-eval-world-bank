@@ -16,9 +16,8 @@ balanced <- match.data(m.out)
 balanced
 
 # DiD
-result <- balanced %>%
+balanced %>%
   mutate(dif = after - before) %>%
   group_by(treatment) %>%
-  summarise(mean_effect = mean(dif)) 
-
-result %>% mutate(total_effect = mean_effect - lag(mean_effect, default = first(mean_effect)))
+  summarise(mean_effect = mean(dif)) %>%
+  mutate(total_effect = mean_effect - lag(mean_effect, default = first(mean_effect)))
