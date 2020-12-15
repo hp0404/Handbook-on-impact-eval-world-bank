@@ -20,7 +20,6 @@ data %>%
   xlab("Період (до та після втручання)") + ylab("Індекс споживчих цін") +
   theme_bw() 
 
-
 # matching
 m.out <- matchit(treatment ~ category + before, data = data, method="nearest")
 m.out
@@ -43,3 +42,23 @@ balanced %>%
   group_by(treatment) %>%
   summarise(mean_group_effect = mean(dif)) %>%
   mutate(mean_total_effect = mean_group_effect - lag(mean_group_effect, default = first(mean_group_effect)))
+
+data %>%
+  mutate(dif = after - before) %>%
+  group_by(treatment) %>%
+  summarise(mean_group_effect = mean(dif)) %>%
+  mutate(mean_total_effect = mean_group_effect - lag(mean_group_effect, default = first(mean_group_effect)))
+
+ttestdata <- balanced %>% 
+  select(-weights, -subclass, -distance) %>%
+  gather(period, value, -treatment, -category, -product) 
+
+tb <- ttestdata %>% filter(period == "before")
+ta <- ttestdata %>% filter(period != "before")
+
+t.test(data=tb, value ~ treatment, var.equal = TRUE)
+t.test(data=ta, value ~ treatment, var.equal = TRUE)
+
+ttest_data <- balanced %>% mutate(dif = after - before)
+
+t.test(data=ttest_data, dif ~ treatment, var.equal = TRUE)
